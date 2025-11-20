@@ -116,50 +116,33 @@ const Agent = ({
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
-
-    if (type === "generate") {
-      await vapi.start(
-        undefined,
-        undefined,
-        undefined,
-        process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!,
-        {
+    try {
+      if (type === "generate") {
+        await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
           variableValues: {
             username: userName,
             userid: userId,
           },
-        }
-      );
-    } else {
-      let formattedQuestions = "";
-      if (questions) {
-        formattedQuestions = questions
-          .map((question) => `- ${question}`)
-          .join("\n");
-      }
-
-      // Use assistant ID from environment variable (required)
-      const assistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID;
-      
-      if (assistantId) {
-        // Use assistant ID (recommended approach)
-        await vapi.start(assistantId, {
-          variableValues: {
-            questions: formattedQuestions,
-          },
         });
       } else {
-        // Fallback to using assistant configuration object
-        // Note: This may fail if VAPI tries to look up an existing assistant
+        let formattedQuestions = "";
+        if (questions) {
+          formattedQuestions = questions
+            .map((question) => `- ${question}`)
+            .join("\n");
+        }
+
         await vapi.start(interviewer, {
           variableValues: {
             questions: formattedQuestions,
           },
         });
       }
+    } catch (error) {
+      console.error("Error starting call:", error);
+      setCallStatus(CallStatus.INACTIVE);
     }
   };
-
   const handleDisconnect = () => {
     setCallStatus(CallStatus.FINISHED);
     vapi.stop();
