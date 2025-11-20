@@ -116,14 +116,22 @@ const Agent = ({
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
+
     try {
       if (type === "generate") {
-        await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
-          variableValues: {
-            username: userName,
-            userid: userId,
-          },
-        });
+        // TypeScript types are outdated - using type assertion for 5-parameter signature
+        await (vapi.start as any)(
+          undefined,
+          undefined,
+          undefined,
+          process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!,
+          {
+            variableValues: {
+              username: userName,
+              userid: userId,
+            },
+          }
+        );
       } else {
         let formattedQuestions = "";
         if (questions) {
@@ -143,6 +151,7 @@ const Agent = ({
       setCallStatus(CallStatus.INACTIVE);
     }
   };
+
   const handleDisconnect = () => {
     setCallStatus(CallStatus.FINISHED);
     vapi.stop();
