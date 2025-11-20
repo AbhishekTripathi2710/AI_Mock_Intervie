@@ -118,12 +118,18 @@ const Agent = ({
     setCallStatus(CallStatus.CONNECTING);
 
     if (type === "generate") {
-      await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
-        variableValues: {
-          username: userName,
-          userid: userId,
-        },
-      });
+      await vapi.start(
+        undefined,
+        undefined,
+        undefined,
+        process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!,
+        {
+          variableValues: {
+            username: userName,
+            userid: userId,
+          },
+        }
+      );
     } else {
       let formattedQuestions = "";
       if (questions) {
@@ -132,7 +138,7 @@ const Agent = ({
           .join("\n");
       }
 
-      // Use assistant ID from environment variable if available, otherwise use config object
+      // Use assistant ID from environment variable (required)
       const assistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID;
       
       if (assistantId) {
@@ -144,6 +150,7 @@ const Agent = ({
         });
       } else {
         // Fallback to using assistant configuration object
+        // Note: This may fail if VAPI tries to look up an existing assistant
         await vapi.start(interviewer, {
           variableValues: {
             questions: formattedQuestions,
