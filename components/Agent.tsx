@@ -132,11 +132,24 @@ const Agent = ({
           .join("\n");
       }
 
-      await vapi.start(interviewer, {
-        variableValues: {
-          questions: formattedQuestions,
-        },
-      });
+      // Use assistant ID from environment variable if available, otherwise use config object
+      const assistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID;
+      
+      if (assistantId) {
+        // Use assistant ID (recommended approach)
+        await vapi.start(assistantId, {
+          variableValues: {
+            questions: formattedQuestions,
+          },
+        });
+      } else {
+        // Fallback to using assistant configuration object
+        await vapi.start(interviewer, {
+          variableValues: {
+            questions: formattedQuestions,
+          },
+        });
+      }
     }
   };
 

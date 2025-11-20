@@ -107,6 +107,7 @@ Create a new file named `.env.local` in the root of your project and add the fol
 ```env
 NEXT_PUBLIC_VAPI_WEB_TOKEN=
 NEXT_PUBLIC_VAPI_WORKFLOW_ID=
+NEXT_PUBLIC_VAPI_ASSISTANT_ID=
 
 GOOGLE_GENERATIVE_AI_API_KEY=
 
@@ -125,6 +126,18 @@ FIREBASE_PRIVATE_KEY=
 ```
 
 Replace the placeholder values with your actual **[Firebase](https://firebase.google.com/)**, **[Vapi](https://vapi.ai/?utm_source=youtube&utm_medium=video&utm_campaign=jsmastery_recruitingpractice&utm_content=paid_partner&utm_term=recruitingpractice)** credentials.
+
+**Important: VAPI Assistant Setup**
+
+To use the interview feature, you need to create an assistant in your VAPI dashboard:
+
+1. Go to [VAPI Dashboard](https://dashboard.vapi.ai/)
+2. Navigate to the "Assistants" section
+3. Create a new assistant or use an existing one
+4. Copy the Assistant ID (it should look like: `d2b1205a-b738-422e-8433-03a9a6cca3b3`)
+5. Add it to your `.env.local` file as `NEXT_PUBLIC_VAPI_ASSISTANT_ID`
+
+**Note:** If you don't have an assistant ID, the application will attempt to use the default assistant configuration, but it's recommended to create an assistant in the VAPI dashboard first to avoid errors.
 
 **Running the Project**
 
